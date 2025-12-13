@@ -22,7 +22,6 @@ logger.setLevel(logging.INFO)
 join_db = JoinReqs
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\((buttonurl|buttonalert):(?:/{0,2})(.+?)(:same)?\))")
 
-imdb = Cinemagoer() 
 TOKENS = {}
 VERIFIED = {}
 BANNED = {}
@@ -45,7 +44,7 @@ class temp(object):
     GETALL = {}
     SHORT = {}
     SETTINGS = {}
-    IMDB_CAP = {}
+    
 
 
 async def pub_is_subscribed(bot, query, channel):
@@ -152,7 +151,7 @@ async def get_poster(query, bulk=False, id=False, file=None):
         "box_office": movie.get("revenue"),
         'localized_title': movie.get('original_title'),
         'kind': "movie" if movie.get("media_type") != "tv" else "tv",
-        "imdb_id": movie.get("imdb_id"),  # TMDB also provides IMDB links sometimes
+        "tmdb_id": movie.get("tmdb_id"),  # TMDB also provides tmdb links sometimes
         "cast": list_to_str(movie.get("cast", [])),
         "runtime": movie.get("runtime"),
         "countries": list_to_str([c['name'] for c in movie.get("production_countries", [])]),
@@ -631,38 +630,38 @@ async def send_all(bot, userid, files, ident, chat_id, user_name, query):
         await query.answer('Hᴇʏ, Sᴛᴀʀᴛ Bᴏᴛ Fɪʀsᴛ Aɴᴅ Cʟɪᴄᴋ Sᴇɴᴅ Aʟʟ', show_alert=True)
         
 async def get_cap(settings, remaining_seconds, files, query, total_results, search):
-    if settings["imdb"]:
-        IMDB_CAP = temp.IMDB_CAP.get(query.from_user.id)
-        if IMDB_CAP:
-            cap = IMDB_CAP
+    if settings["tmdb"]:
+        tmdb_CAP = temp.tmdb_CAP.get(query.from_user.id)
+        if tmdb_CAP:
+            cap = tmdb_CAP
             cap+="<b>\n\n<u>🍿 Your Movie Files 👇</u></b>\n\n"
             for file in files:
                 cap += f"<b>📁 <a href='https://telegram.me/{temp.U_NAME}?start=files_{file['file_id']}'>[{get_size(file['file_size'])}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file['file_name'].split()))}\n\n</a></b>"
         else:
-            imdb = await get_poster(search, file=(files[0])["file_name"]) if settings["imdb"] else None
-            if imdb:
-                TEMPLATE = script.IMDB_TEMPLATE_TXT
+            tmdb = await get_poster(search, file=(files[0])["file_name"]) if settings["tmdb"] else None
+            if tmdb:
+                TEMPLATE = script.tmdb_TEMPLATE_TXT
                 cap = TEMPLATE.format(
-                    title=imdb['title'],
-                    release_date=imdb['release_date'],
-                    rating=imdb['rating'],
-                    genres=imdb['genres'],
-                    countries=imdb["countries"],
-                    runtime=imdb["runtime"],
-                    votes=imdb["votes"],
+                    title=tmdb['title'],
+                    release_date=tmdb['release_date'],
+                    rating=tmdb['rating'],
+                    genres=tmdb['genres'],
+                    countries=tmdb["countries"],
+                    runtime=tmdb["runtime"],
+                    votes=tmdb["votes"],
 
-                    localized_title=imdb["localized_title"],
-                    tmdb_id=imdb.get("tmdb_id", imdb["imdb_id"]),  # fallback
-                    imdb_id=imdb["imdb_id"],
+                    localized_title=tmdb["localized_title"],
+                    tmdb_id=tmdb.get("tmdb_id", tmdb["tmdb_id"]),  # fallback
+                    tmdb_id=tmdb["tmdb_id"],
 
-                    cast=imdb["cast"],
-                    director=imdb["director"],
-                    writer=imdb["writer"],
-                    producer=imdb["producer"],
+                    cast=tmdb["cast"],
+                    director=tmdb["director"],
+                    writer=tmdb["writer"],
+                    producer=tmdb["producer"],
 
-                    plot=imdb["plot"],
-                    poster=imdb["poster"],
-                    url=imdb["url"],
+                    plot=tmdb["plot"],
+                    poster=tmdb["poster"],
+                    url=tmdb["url"],
                 )
 
                 cap+="<b>\n\n<u>🍿 Your Movie Files 👇</u></b>\n\n"
@@ -708,4 +707,5 @@ async def get_seconds(time_string):
         return value * 86400 * 365
     else:
         return 0
+
 
