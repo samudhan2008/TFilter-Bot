@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from utils.tmdb import search_multi, get_movie_details, get_tv_details, get_tv_season, pretty_card
+from utils.tmdb import *
+from helper import temp
 
 
 @Client.on_callback_query()
@@ -106,4 +107,5 @@ async def tmdb_callbacks(client, callback_query):
         text = '\n'.join(lines)
         await callback_query.message.edit_caption(text)
         await callback_query.answer()
+
         return
