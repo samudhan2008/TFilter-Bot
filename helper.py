@@ -652,7 +652,7 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
 
                     localized_title=tmdb["localized_title"],
                     tmdb_id=tmdb.get("tmdb_id", tmdb["tmdb_id"]),  # fallback
-                    tmdb_id=tmdb["tmdb_id"],
+                    
 
                     cast=tmdb["cast"],
                     director=tmdb["director"],
@@ -707,5 +707,6 @@ async def get_seconds(time_string):
         return value * 86400 * 365
     else:
         return 0
+
 
 
