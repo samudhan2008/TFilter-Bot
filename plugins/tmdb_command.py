@@ -1,7 +1,8 @@
 # Place under plugins/ so the bot auto-loads it.
+from helper import temp
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from utils.tmdb import search_multi, get_movie_details, get_tv_details, suggest_title, pretty_card
+from utils.tmdb import search_multi, get_movie_details, get_tv_details, suggest_title, pretty_card, search_tmdb, get_tmdb
 
 
 @Client.on_message(filters.command('tmdb'))
@@ -49,4 +50,5 @@ async def tmdb_cmd(client, message):
     if details.get('poster'):
         await message.reply_photo(details['poster'], caption=caption, reply_markup=keyboard)
     else:
+
         await message.reply(caption, reply_markup=keyboard)
