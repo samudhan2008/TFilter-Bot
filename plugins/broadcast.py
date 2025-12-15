@@ -6,7 +6,7 @@ import datetime, time, asyncio
 from pyrogram import Client, filters
 from database.users_chats_db import db
 from info import ADMINS
-from utils import broadcast_messages, broadcast_messages_group
+from helper import broadcast_messages, broadcast_messages_group
         
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS))
 async def pm_broadcast(bot, message):
@@ -77,5 +77,6 @@ async def broadcast_group(bot, message):
     time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
     await sts.edit(f"Broadcast Completed:\nCompleted in {time_taken} seconds.\n\nTotal Groups {total_groups}\nCompleted: {done} / {total_groups}\nSuccess: {success}")
         
+
 
 
